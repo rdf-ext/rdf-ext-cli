@@ -1,0 +1,16 @@
+@prefix schema: <http://schema.org/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+<PersonShape> a sh:NodeShape;
+  sh:targetClass schema:Person;
+  sh:property [
+    sh:path schema:birthDate;
+    sh:datatype xsd:date
+  ], [
+    sh:path schema:familyName;
+    sh:nodeKind sh:Literal
+  ], [
+    sh:path schema:givenName;
+    sh:nodeKind sh:Literal
+  ].
