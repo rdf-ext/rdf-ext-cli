@@ -1,0 +1,10 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+CONSTRUCT {
+    wd:Q842945 rdfs:label ?name.
+} WHERE {
+    wd:Q842945 rdfs:label ?name.
+
+    FILTER (LANG(?name) = "en")
+}
