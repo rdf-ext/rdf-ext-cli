@@ -63,7 +63,7 @@ program
     outputType,
     pretty
   }) => {
-    if (!input) {
+    if (!input && !inputEndpoint) {
       return program.help()
     }
 
