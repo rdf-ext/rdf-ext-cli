@@ -9,6 +9,7 @@ import createInputStream from '../lib/createInputStream.js'
 import createOutputStream from '../lib/createOutputStream.js'
 import createShaclStream from '../lib/createShaclStream.js'
 import transformMapNamespaceFunc from '../lib/transformMapNamespace.js'
+import transformSkolemIrisFunc from '../lib/transformSkolemIris.js'
 import transformToTripleFunc from '../lib/transformToTriple.js'
 
 const program = new Command()
@@ -42,6 +43,7 @@ program
   .option('--shacl-details', 'generate nested result details')
   .option('--shacl-trace', 'generate results for path traversing')
   .option('--transform-map-namespace <mapping>', 'map the given namespaces', collectMappings, rdf.termMap())
+  .option('--transform-skolem-iris <baseIri>', 'map blank nodes to Skolem IRIs')
   .option('--transform-to-triples', 'set graph to default graph')
   .option('--output-prefix <prefix>', 'output prefix', collectPrefixes, new Map())
   .option('--output-type <type>', 'output content type', 'text/turtle')
@@ -58,6 +60,7 @@ program
     shaclDetails,
     shaclTrace,
     transformMapNamespace,
+    transformSkolemIris,
     transformToTriple,
     outputPrefix,
     outputType,
@@ -99,6 +102,13 @@ program
 
     if (transformMapNamespace) {
       const toTripleStream = transformMapNamespaceFunc(transformMapNamespace)
+
+      stream.pipe(toTripleStream)
+      stream = toTripleStream
+    }
+
+    if (transformSkolemIris) {
+      const toTripleStream = transformSkolemIrisFunc(transformSkolemIris)
 
       stream.pipe(toTripleStream)
       stream = toTripleStream
