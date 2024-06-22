@@ -34,7 +34,7 @@
     "rdf-ext": "^2.5.0",
     "rdf-utils-namespace": "^0.2.1",
     "readable-stream": "^4.4.2",
-    "shacl-engine": "^0.1.0",
+    "shacl-engine": "^1.0.0",
     "sparql-http-client": "^3.0.0"
   },
   "devDependencies": {
