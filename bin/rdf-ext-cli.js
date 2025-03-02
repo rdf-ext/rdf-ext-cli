@@ -47,11 +47,13 @@ program
   .option('--transform-to-triples', 'set graph to default graph')
   .option('--output-prefix <prefix>', 'output prefix', collectPrefixes, new Map())
   .option('--output-type <type>', 'output content type', 'text/turtle')
+  .option('--keep-prefixes', 'keep prefixes from input')
   .option('--pretty', 'use pretty print serializer')
   .action(async (input, {
     inputType,
     inputEndpoint,
     inputQuery,
+    keepPrefixes,
     shaclType,
     shaclEndpoint,
     shaclQuery,
@@ -78,6 +80,11 @@ program
       contentType: inputType,
       defaultStream: process.stdin,
       endpointUrl: inputEndpoint,
+      prefix: keepPrefixes && ((prefix, namespace) => {
+        if (!outputPrefix || !outputPrefix.has(prefix)) {
+          outputPrefix.set(prefix, namespace)
+        }
+      }),
       query: inputQuery,
       url: input
     })
