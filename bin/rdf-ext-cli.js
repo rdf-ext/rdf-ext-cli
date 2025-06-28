@@ -42,6 +42,7 @@ program
   .option('--shacl-debug', 'generate results for successful validations')
   .option('--shacl-details', 'generate nested result details')
   .option('--shacl-trace', 'generate results for path traversing')
+  .option('--shacl-error', 'error when SHACL validation produces a Violation result severity')
   .option('--transform-map-namespace <mapping>', 'map the given namespaces', collectMappings, rdf.termMap())
   .option('--transform-skolem-iris <baseIri>', 'map blank nodes to Skolem IRIs')
   .option('--transform-to-triples', 'set graph to default graph')
@@ -61,6 +62,7 @@ program
     shaclDebug,
     shaclDetails,
     shaclTrace,
+    shaclError,
     transformMapNamespace,
     transformSkolemIris,
     transformToTriple,
@@ -68,6 +70,8 @@ program
     outputType,
     pretty
   }) => {
+    let violationPromise = undefined;
+
     if (!input && !inputEndpoint) {
       return program.help()
     }
@@ -97,11 +101,13 @@ program
         url: shaclUrl
       })
 
-      const shaclStream = createShaclStream(shapeStream, {
+      const { stream: shaclStream, violation } = createShaclStream(shapeStream, {
         debug: shaclDebug,
         details: shaclDetails,
         trace: shaclTrace
       })
+
+      violationPromise = violation
 
       stream.pipe(shaclStream)
       stream = shaclStream
@@ -136,6 +142,9 @@ program
     stream.pipe(outputStream)
 
     await promisify(finished)(outputStream)
+    if (shaclError && typeof violationPromise !== 'undefined' && (await violationPromise)) {
+      process.exitCode = 1;
+    }
   })
 
 program.parse(process.argv)
