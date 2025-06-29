@@ -70,7 +70,7 @@ program
     outputType,
     pretty
   }) => {
-    let violationPromise = undefined;
+    let violationPromise
 
     if (!input && !inputEndpoint) {
       return program.help()
@@ -143,7 +143,7 @@ program
 
     await promisify(finished)(outputStream)
     if (shaclError && typeof violationPromise !== 'undefined' && (await violationPromise)) {
-      process.exitCode = 1;
+      process.exitCode = 1
     }
   })
 
