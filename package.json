@@ -9,7 +9,7 @@
     "rdf-ext-cli": "bin/rdf-ext-cli.js"
   },
   "scripts": {
-    "test": "stricter-standard"
+    "test": "stricter-standard && c8 --reporter=lcov --reporter=text-summary mocha"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,8 @@
     "sparql-http-client": "^3.0.0"
   },
   "devDependencies": {
+    "c8": "^10.1.2",
+    "mocha": "^11.0.1",
     "stricter-standard": "^0.3.0"
   }
 }
