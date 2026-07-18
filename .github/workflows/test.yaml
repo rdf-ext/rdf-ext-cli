@@ -10,6 +10,7 @@ jobs:
         node:
           - '22'
           - '24'
+          - '26'
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -17,3 +18,16 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm install
       - run: npm test
+      - uses: coverallsapp/github-action@v2
+        with:
+          flag-name: run Node v${{ matrix.node }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+  finally:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
